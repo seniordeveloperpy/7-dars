@@ -1,0 +1,92 @@
+{% extends 'dashboard/base.html' %}
+
+{% block content %}
+
+
+<div class="main-content">
+    <div class="page-header">
+        <h2 class="header-title">SHOP</h2>
+        <div class="header-sub-title">
+            <nav class="breadcrumb breadcrumb-dash">
+                <a href="#" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Dashboard</a>
+                <a class="breadcrumb-item" href="#">Enter Product</a>
+                <span class="breadcrumb-item active">Ro`yxat</span>
+            </nav>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="d-flex justify-content-around">
+            <h4>Enter Productlar ro`yxat</h4>
+            <div>
+                <form class="input-group input-group-sm mb-3">
+                    <select name="category_code" class="form-control">
+                        <option value="0">Barchasi</option>
+                        {% for category in categories %}
+                        <option value="{{category.code}}" {% if category.code == category_code %} selected {% endif %}>{{category}}</option>
+                        {% endfor %}
+                    </select>
+                    <div class="input-group-prepend">
+                        <button class="input-group-text" id="inputGroup-sizing-sm" type="submit">Filterlash</button>
+                    </div>
+                </form>
+            </div>
+            </div>
+            <div class="m-t-25">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Product</th>
+                                <th scope="col">Kirim</th>
+                                <th scope="col">Harakatlar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for q in queryset %}
+                            <tr>
+                                <th scope="row">{{forloop.counter}}</th>
+                                <td>{{q.product.name}}</td>
+                                <td style="color: green;">+{{q.quantity}}</td>
+                                <td>
+                                    <button type="button" class="btn btn-icon btn-hover btn-sm btn-rounded" data-toggle="modal" data-target=".bd-example-modal-sm{{forloop.counter}}">
+                                        <i class="anticon anticon-edit"></i>
+                                    </button>
+                                    <div class="modal fade bd-example-modal-sm{{forloop.counter}}">
+                                        <div class="modal-dialog modal-sm">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title h4">{{q.product.name}}</h5>
+                                                    <button type="button" class="close" data-dismiss="modal">
+                                                        <i class="anticon anticon-close"></i>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <b>{{q.product.name}} miqdorini o`zgartirmoqchimisiz?</b>
+                                                </div>
+                                                <div class="btn-group">
+                                                    <form method="post" action="{% url 'dashboard:update_product_enter' q.code %}">
+                                                        {% csrf_token %}
+                                                        <div class="modal-body">
+                                                            <input type="number" class="form-control" value="{{q.quantity}}" name="quantity">
+                                                        </div>
+                                                        <button type="submit" class="btn btn-primary btn-tone">Ha</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
